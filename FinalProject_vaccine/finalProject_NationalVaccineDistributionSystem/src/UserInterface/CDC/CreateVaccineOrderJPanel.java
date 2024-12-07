@@ -649,7 +649,7 @@ public class CreateVaccineOrderJPanel extends javax.swing.JPanel {
                         Order order = new Order();
                         order.addNewOrderItem(oi.getQuantity(), oi.getVaccineProduct());
                         vaccineWorkRequest.setVaccineOrder(order);
-                        System.out.println("Created VaccineOrderWorkRequest for item: " + oi.getVaccineProduct().getVaccineName());
+                        System.out.println("Created VaccineOrderWorkRequest for item: " + oi.getVaccineProduct().getVaccineDefinition().getVaccineName());
 
                         // Deduct amount from CDC
                         double amount = oi.getQuantity() * oi.getVaccineProduct().getVaccinePrice();

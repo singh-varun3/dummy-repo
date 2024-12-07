@@ -46,47 +46,69 @@ public class ManageOrdersJPanel extends javax.swing.JPanel {
         
     }
     
-    private void populateTable(){
-        
+    private void populateTable() {
         DefaultTableModel model = (DefaultTableModel) orderjTable.getModel();
         model.setRowCount(0);
-        
-         CDCOrganization cOrg = null;
-         try{
-            for(Organization org : cdcEnterprise.getOrganizationDirectory().getOrganizationList())
-            {   
-                System.out.println("Checking for CDC ORG");
-                if(org instanceof CDCOrganization)
-                {
-                    System.out.println("Setting org to cdc");
-                    cOrg = (CDCOrganization)org;
-                    for(WorkRequest workRequest : cOrg.getWorkQueue().getWorkRequestList())
 
-                    {   
-                        System.out.println("IN FOR LOOP");
-                        if(workRequest instanceof ProviderVaccineOrderWorkRequest)
-                        {
-                            System.out.println("WORK REQUEST: " + workRequest.toString());
-                           ProviderVaccineOrderWorkRequest vaccineOrderWR = (ProviderVaccineOrderWorkRequest)workRequest;
+        CDCOrganization cOrg = null;
 
-                           Object[] row = new Object[6];
+        try {
+            // Logging: Begin populateTable execution
+            System.out.println("populateTable: Start populating the table.");
 
-                           row[0] = vaccineOrderWR;
-                           row[1] = vaccineOrderWR.getEnterprise();
-                           row[2] = vaccineOrderWR.getRequestState();
-                           row[3] = vaccineOrderWR.getSender();
-                           row[4] = vaccineOrderWR.getStatus();
-                           row[5] = vaccineOrderWR.getCdcApprovedBy();
+            for (Organization org : cdcEnterprise.getOrganizationDirectory().getOrganizationList()) {
+                System.out.println("Checking organization: " + org.getName());
 
-                           model.addRow(row);
-                       }
+                if (org instanceof CDCOrganization) {
+                    System.out.println("Found CDCOrganization: " + org.getName());
+                    cOrg = (CDCOrganization) org;
+
+                    for (WorkRequest workRequest : cOrg.getWorkQueue().getWorkRequestList()) {
+                        System.out.println("Processing work request: " + workRequest.toString());
+
+                        if (workRequest instanceof ProviderVaccineOrderWorkRequest) {
+                            System.out.println("Work request is of type ProviderVaccineOrderWorkRequest.");
+                            ProviderVaccineOrderWorkRequest vaccineOrderWR = (ProviderVaccineOrderWorkRequest) workRequest;
+
+                            // Prepare the row data
+                            Object[] row = new Object[6];
+                            row[0] = vaccineOrderWR; // Assuming toString() provides meaningful information
+                            row[1] = vaccineOrderWR.getEnterprise();
+                            row[2] = vaccineOrderWR.getRequestState();
+                            row[3] = vaccineOrderWR.getSender();
+                            row[4] = vaccineOrderWR.getStatus();
+                            row[5] = vaccineOrderWR.getCdcApprovedBy();
+
+                            // Log the row data
+                            System.out.println("Row data: " +
+                                    "Order = " + row[0] +
+                                    ", Enterprise = " + row[1] +
+                                    ", RequestState = " + row[2] +
+                                    ", Sender = " + row[3] +
+                                    ", Status = " + row[4] +
+                                    ", ApprovedBy = " + row[5]);
+
+                            // Add the row to the table model
+                            model.addRow(row);
+                            System.out.println("Row added to table.");
+                        } else {
+                            System.out.println("Skipping non-ProviderVaccineOrderWorkRequest work request.");
+                        }
                     }
+                } else {
+                    System.out.println("Skipping organization (not CDCOrganization): " + org.getName());
                 }
             }
-         }catch(Exception e){
-             System.out.println("ERROR : " + e);
-         }
+
+            // Logging: Successfully populated the table
+            System.out.println("populateTable: Finished populating the table.");
+        } catch (Exception e) {
+            // Logging: Exception details
+            System.out.println("ERROR in populateTable: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
