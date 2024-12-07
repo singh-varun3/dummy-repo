@@ -90,7 +90,6 @@ public class ConfigureABusiness {
                 
         
         
-        
         //create the State
         StateNetwork state = business.addNewState("MA");
         state.setStatePopulation(100000);

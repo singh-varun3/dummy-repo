@@ -38,7 +38,7 @@ public class ManagePersonJPanel extends javax.swing.JPanel {
     
     private void populateTable(){
         
-        DefaultTableModel model = (DefaultTableModel) employeejTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) employeesTable.getModel();
         
         model.setRowCount(0);
         
@@ -78,7 +78,7 @@ public class ManagePersonJPanel extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        employeejTable = new javax.swing.JTable();
+        employeesTable = new javax.swing.JTable();
         createEmployeejButton = new javax.swing.JButton();
         viewjButton = new javax.swing.JButton();
         removejButton = new javax.swing.JButton();
@@ -88,7 +88,7 @@ public class ManagePersonJPanel extends javax.swing.JPanel {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Manage Persons");
 
-        employeejTable.setModel(new javax.swing.table.DefaultTableModel(
+        employeesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -104,14 +104,14 @@ public class ManagePersonJPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        employeejTable.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(employeejTable);
-        if (employeejTable.getColumnModel().getColumnCount() > 0) {
-            employeejTable.getColumnModel().getColumn(0).setResizable(false);
-            employeejTable.getColumnModel().getColumn(1).setResizable(false);
-            employeejTable.getColumnModel().getColumn(2).setResizable(false);
-            employeejTable.getColumnModel().getColumn(3).setResizable(false);
-            employeejTable.getColumnModel().getColumn(4).setResizable(false);
+        employeesTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(employeesTable);
+        if (employeesTable.getColumnModel().getColumnCount() > 0) {
+            employeesTable.getColumnModel().getColumn(0).setResizable(false);
+            employeesTable.getColumnModel().getColumn(1).setResizable(false);
+            employeesTable.getColumnModel().getColumn(2).setResizable(false);
+            employeesTable.getColumnModel().getColumn(3).setResizable(false);
+            employeesTable.getColumnModel().getColumn(4).setResizable(false);
         }
 
         createEmployeejButton.setText("Create New Person >>");
@@ -182,14 +182,14 @@ public class ManagePersonJPanel extends javax.swing.JPanel {
 
     private void removejButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removejButtonActionPerformed
         // TODO add your handling code here:
-         int row = employeejTable.getSelectedRow();
+         int row = employeesTable.getSelectedRow();
         if(row<0) {
             JOptionPane.showMessageDialog(null, "Please select a Employee from table");
             return;
         }
         
-        Person person = (Person)employeejTable.getValueAt(row, 0);
-        Organization org = (Organization) employeejTable.getValueAt(row, 4);
+        Person person = (Person)employeesTable.getValueAt(row, 0);
+        Organization org = (Organization) employeesTable.getValueAt(row, 4);
         
         org.getPersonDirectory().removePerson(person);
         populateTable();
@@ -200,6 +200,7 @@ public class ManagePersonJPanel extends javax.swing.JPanel {
 
     private void createEmployeejButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createEmployeejButtonActionPerformed
         // TODO add your handling code here:
+        System.out.println("CREATE PERSON CURRENT ENTERPRISE : " + enterprise.getName());
         CreatePersonJPanel panel = new CreatePersonJPanel(workContainer, enterprise);
         workContainer.add("CreateEmployeeJPanel", panel);
         CardLayout layout = (CardLayout)workContainer.getLayout();
@@ -208,13 +209,13 @@ public class ManagePersonJPanel extends javax.swing.JPanel {
 
     private void viewjButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewjButtonActionPerformed
         // TODO add your handling code here:
-        int row = employeejTable.getSelectedRow();
+        int row = employeesTable.getSelectedRow();
         if(row<0) {
             JOptionPane.showMessageDialog(null, "Please select a Employee from table");
-            return;
+            return; 
         }
-        Person person = (Person)employeejTable.getValueAt(row, 0);
-        Organization org = (Organization) employeejTable.getValueAt(row, 4);
+        Person person = (Person)employeesTable.getValueAt(row, 0);
+        Organization org = (Organization) employeesTable.getValueAt(row, 4);
         
         
         
@@ -232,7 +233,7 @@ public class ManagePersonJPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createEmployeejButton;
-    private javax.swing.JTable employeejTable;
+    private javax.swing.JTable employeesTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton refreshjButton;

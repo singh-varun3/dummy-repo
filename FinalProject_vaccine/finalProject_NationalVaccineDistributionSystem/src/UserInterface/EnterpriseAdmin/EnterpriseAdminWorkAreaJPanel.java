@@ -257,7 +257,7 @@ public class EnterpriseAdminWorkAreaJPanel extends javax.swing.JPanel {
 
     private void manageDepartmentsjButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageDepartmentsjButtonActionPerformed
         // TODO add your handling code here:
-         ManageDepartmentJPanel panel = new ManageDepartmentJPanel(workContainer, enterprise);
+        ManageDepartmentJPanel panel = new ManageDepartmentJPanel(workContainer, enterprise);
         workContainer.add("ManageDepartmentJPanel", panel);
         CardLayout layout = (CardLayout)workContainer.getLayout();
         layout.next(workContainer);

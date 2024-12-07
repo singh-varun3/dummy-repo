@@ -266,7 +266,8 @@ public class DistributorEmployeeWorkAreaJPanel extends javax.swing.JPanel {
 
     private void maufactureOrdersjButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maufactureOrdersjButtonActionPerformed
         // TODO add your handling code here:
-         ManageOrdersfromManufacturerJPanel panel = new ManageOrdersfromManufacturerJPanel(workContainer, enterprise, distributorOrg);
+        System.out.println("TESTING");
+        ManageOrdersfromManufacturerJPanel panel = new ManageOrdersfromManufacturerJPanel(workContainer, enterprise, distributorOrg);
         workContainer.add("ManageOrdersfromManufacturerJPanel", panel);
         CardLayout layout = (CardLayout)workContainer.getLayout();
         layout.next(workContainer);

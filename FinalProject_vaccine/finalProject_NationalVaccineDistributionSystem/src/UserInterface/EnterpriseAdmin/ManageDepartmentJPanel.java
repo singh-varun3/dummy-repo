@@ -252,13 +252,13 @@ public class ManageDepartmentJPanel extends javax.swing.JPanel {
         Organization.OrganizationType type = (Organization.OrganizationType) organizationJComboBox.getSelectedItem();
         //check if organization exists
          if(enterprise instanceof CDC)
-        {   
+        {
             for(Organization org : enterprise.getOrganizationDirectory().getOrganizationList())
             {
                 if(org instanceof CDCOrganization)
                 {
-                     JOptionPane.showMessageDialog(null, "Department Exists!");
-            return;
+                    JOptionPane.showMessageDialog(null, "Department Exists!");
+                    return;
                 }
             }
         }
@@ -333,7 +333,7 @@ public class ManageDepartmentJPanel extends javax.swing.JPanel {
             
             
         }
-        
+        System.out.println("TYPE : " + type.toString());
         enterprise.getOrganizationDirectory().createOrganization(type);
         populateTable();
         

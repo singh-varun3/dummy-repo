@@ -272,6 +272,7 @@ public class CreatePersonJPanel extends javax.swing.JPanel {
         Patient patient = null;
         if(enterprise instanceof CDC)
         { person = org.getPersonDirectory().createPerson(firstName, lastName, RoleType.CDCEmployee);
+            System.out.println("NEW PERSON FOR CDC : " + person.toString());
         }
          if(enterprise instanceof Manufacturer)
         { person = org.getPersonDirectory().createPerson(firstName, lastName, RoleType.Manufacturer);

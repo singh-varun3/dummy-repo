@@ -615,124 +615,93 @@ public class CreateVaccineOrderJPanel extends javax.swing.JPanel {
     private void checkOutJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkOutJButtonActionPerformed
         // TODO add your handling code here:
         // if(!customer.getOrder().getOrderItemList().isEmpty())
-        if (cartOrder != null) 
-            {
-                //create new order
-                
-                /*
-                for(OrderItem oi : cartOrder)
-                {
-                     order.addNewOrderItem(oi.getQuantity(), oi.getVaccineProduct());
-                }
-                */ 
-                //add the order in the CDC order
-                Order cdcOrder = new Order();
-                
-                for(OrderItem oi: cartOrder)
-                {
-                    cdcOrder.getOrderList().add(oi);
-                }
-                //add order to cdc order catalog
-                // cdcOrg.getOrderCatalog().addOrder(cdcOrder);
-                
-                
-                
-                /*
-                //create a new Order Work Request
-                VaccineOrderWorkRequest vaccineWorkRequest = new VaccineOrderWorkRequest();
-                vaccineWorkRequest.setSender(userAccount);
-                vaccineWorkRequest.setStatus("NewOrder");
-                vaccineWorkRequest.setVaccineOrder(order);
-                */
-                
-                //fetch the manufacturer and insert the work request in his queue
-                for(OrderItem oi: cartOrder)
-                {
-                    String manufacturer = oi.getVaccineProduct().getManufacturerName();
-                    for(Manufacturer manuf : business.getManufacturerDirectory().getManufacturerList())
-                    {
-                        if(manufacturer.equalsIgnoreCase(String.valueOf(manuf)))
-                        {   
-                            //create a new Order Work Request
-                                VaccineOrderWorkRequest vaccineWorkRequest = new VaccineOrderWorkRequest();
-                                vaccineWorkRequest.setSender(userAccount);
-                                vaccineWorkRequest.setStatus("NewOrder");
-                                Order order = new Order();
-                                order.addNewOrderItem(oi.getQuantity(), oi.getVaccineProduct());
-                                vaccineWorkRequest.setVaccineOrder(order);
-                                //add order to cdc order catalog
-                                //cdcOrg.getDistributorOrders().addOrder(order);
-                                
-                                //deduct the amount from CDC 
-                                double amount = oi.getQuantity()*oi.getVaccineProduct().getVaccinePrice();
-                                if(cdc.getFinancialAccount() != null)
-                                cdc.getFinancialAccount().setTotalBalance(cdc.getFinancialAccount().getTotalBalance() -amount);
-                                
-                                //add the amount to Manufacturer
-                                if(manuf.getFinancialAccount() != null)
-                                manuf.getFinancialAccount().setTotalBalance(manuf.getFinancialAccount().getTotalBalance() + amount);
-                                
-                            
-                            for(Organization org:manuf.getOrganizationDirectory().getOrganizationList() )
-                            {
-                                if(org instanceof ManufactureOrganization)
-                                {
-                                    org.getWorkQueue().addWorkRequest(vaccineWorkRequest);
-                                }
+        try {
+        // Log: Button click detected
+        System.out.println("Checkout button clicked.");
+
+        // Check if the cart is not null
+        if (cartOrder != null) {
+            System.out.println("Cart is not null. Proceeding with checkout...");
+
+            // Create a new CDC order
+            Order cdcOrder = new Order();
+            System.out.println("New CDC Order created.");
+
+            for (OrderItem oi : cartOrder) {
+                cdcOrder.getOrderList().add(oi);
+                System.out.println("Added item to CDC Order: " + oi.getVaccineProduct().getVaccineDefinition().getVaccineName()+ ", Quantity: " + oi.getQuantity());
+            }
+
+            // Process each item in the cart
+            for (OrderItem oi : cartOrder) {
+                String manufacturer = oi.getVaccineProduct().getManufacturerName();
+                System.out.println("Processing item: " + oi.getVaccineProduct().getVaccineDefinition().getVaccineName() + " by manufacturer: " + manufacturer);
+
+                for (Manufacturer manuf : business.getManufacturerDirectory().getManufacturerList()) {
+                    if (manufacturer.equalsIgnoreCase(String.valueOf(manuf))) {
+                        System.out.println("Found matching manufacturer: " + manuf.getName());
+
+                        // Create a new Vaccine Order Work Request
+                        VaccineOrderWorkRequest vaccineWorkRequest = new VaccineOrderWorkRequest();
+                        vaccineWorkRequest.setSender(userAccount);
+                        vaccineWorkRequest.setStatus("NewOrder");
+
+                        Order order = new Order();
+                        order.addNewOrderItem(oi.getQuantity(), oi.getVaccineProduct());
+                        vaccineWorkRequest.setVaccineOrder(order);
+                        System.out.println("Created VaccineOrderWorkRequest for item: " + oi.getVaccineProduct().getVaccineDefinition().getVaccineName());
+
+                        // Deduct amount from CDC
+                        double amount = oi.getQuantity() * oi.getVaccineProduct().getVaccinePrice();
+                        if (cdc.getFinancialAccount() != null) {
+                            double newBalance = cdc.getFinancialAccount().getTotalBalance() - amount;
+                            cdc.getFinancialAccount().setTotalBalance(newBalance);
+                            System.out.println("Deducted " + amount + " from CDC account. New balance: " + newBalance);
+                        }
+
+                        // Add amount to Manufacturer
+                        if (manuf.getFinancialAccount() != null) {
+                            double newBalance = manuf.getFinancialAccount().getTotalBalance() + amount;
+                            manuf.getFinancialAccount().setTotalBalance(newBalance);
+                            System.out.println("Added " + amount + " to Manufacturer account. New balance: " + newBalance);
+                        }
+
+                        // Add the work request to the Manufacturer's organization queue
+                        for (Organization org : manuf.getOrganizationDirectory().getOrganizationList()) {
+                            if (org instanceof ManufactureOrganization) {
+                                org.getWorkQueue().addWorkRequest(vaccineWorkRequest);
+                                System.out.println("Added work request to ManufactureOrganization: " + org.getName());
                             }
                         }
                     }
                 }
-                
-                JOptionPane.showMessageDialog(null, "Your order has been successfuly added!");
-                
-                CreateVaccineOrderJPanel panel = new CreateVaccineOrderJPanel(workContainer, cdc, business, cdcOrg,userAccount);
-        workContainer.add("CreateVaccineOrderJPanel", panel);
-        CardLayout layout = (CardLayout)workContainer.getLayout();
-        layout.next(workContainer);
-            
+            }
+
+            JOptionPane.showMessageDialog(null, "Your order has been successfully added!");
+            System.out.println("Order successfully added.");
+
+            // Navigate to the Create Vaccine Order panel
+            CreateVaccineOrderJPanel panel = new CreateVaccineOrderJPanel(workContainer, cdc, business, cdcOrg, userAccount);
+            workContainer.add("CreateVaccineOrderJPanel", panel);
+            CardLayout layout = (CardLayout) workContainer.getLayout();
+            layout.next(workContainer);
+            System.out.println("Navigated to CreateVaccineOrderJPanel.");
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Error occurred when trying to check out!");
+            System.out.println("Error: Cart order is null.");
         }
-        else
-        {JOptionPane.showMessageDialog(null, "Error occured when trying to check out!");
-        }
+
+        // Refresh the manufacturer vaccines and cart table
         displayManufacturerVaccines();
         refreshCartTable();
-                /*
-                
-                ShippingOrderWorkRequest shippingWorkRequest = new ShippingOrderWorkRequest();
-                shippingWorkRequest.setSender(userAccount);
-                shippingWorkRequest.setStatus("Pending Approval");
-                shippingWorkRequest.setOrderNumber(order.getOrderNumber());
-                //fetch the Sales organization and insert this work request in its work queue
-                Organization org = null;
-                for (Organization organization : business.getOrganizationDir().getOrganizationList()) {
-                    if (organization instanceof SalesOrganization) {
-                        org = organization;
-                    }
-                }
-                if (org != null) {
-                    org.getWorkQueue().getWorkRequestList().add(shippingWorkRequest);
-                    userAccount.getWorkQueue().getWorkRequestList().add(shippingWorkRequest);
-                }
-            }
-            
-        } else {
-            JOptionPane.showMessageDialog(null, "Error occured when trying to check out!");
-        }
-        isCheckedOut = true;
-        int dialogButton = JOptionPane.YES_NO_OPTION;
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Would you like to Place another order?", "Warning", dialogButton);
+        System.out.println("Refreshed manufacturer vaccines and cart table.");
 
-        //if yes
-        if (dialogResult == JOptionPane.YES_OPTION) {
-            order = new Order(); // to create new order
-
-        }
-                        
-        System.out.println("After checkout: " + order.getOrderNumber());
-                        */
-        //refresh tables
-        
+    } catch (Exception e) {
+        System.out.println("Error occurred during checkout: " + e.getMessage());
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "An error occurred during checkout. Please check the logs for details.");
+    }
     }//GEN-LAST:event_checkOutJButtonActionPerformed
 
     private void manufacturerjComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manufacturerjComboBoxActionPerformed

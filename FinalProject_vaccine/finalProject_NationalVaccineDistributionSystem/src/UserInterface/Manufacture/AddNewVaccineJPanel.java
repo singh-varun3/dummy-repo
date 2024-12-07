@@ -11,6 +11,7 @@ import Business.NationalEnterprise.Manufacturer;
 import Business.Organization.ManufactureOrganization;
 import Business.Organization.Organization;
 import Business.Vaccine.Vaccine;
+import Business.Vaccine.VaccineCatalog;
 import Business.Vaccine.VaccineProduct;
 import java.awt.CardLayout;
 import java.util.Date;
@@ -37,6 +38,7 @@ public class AddNewVaccineJPanel extends javax.swing.JPanel {
         this.business = business;
         populateDepartmentJComboBox();
         populateVaccineJComboBox();
+        System.out.println("MANUFACTURER : " + manufacturer.toString());
         
         
     }
@@ -44,20 +46,33 @@ public class AddNewVaccineJPanel extends javax.swing.JPanel {
     private void populateDepartmentJComboBox(){
         
         departmentjComboBox.removeAllItems();
-        
-        for(Organization org: manufacturer.getOrganizationDirectory().getOrganizationList())
+        System.out.println("MANUFACT LIST : " + manufacturer.getOrganizationDirectory().getOrganizationList().toString());
+        for(Organization org: manufacturer.getOrganizationDirectory().getOrganizationList()){
             departmentjComboBox.addItem(org);
-        
+        }
         
     }
     
     private void populateVaccineJComboBox(){
         
         vaccineNamejComboBox.removeAllItems();
+        VaccineCatalog vaccineCatalog = new VaccineCatalog();
+
+        // Add a new vaccine to the catalog
+        Vaccine newVaccine = business.getVaccineCatalog().addNewVaccineDefinition();
+
+        // Set the details of the new vaccine
+        newVaccine.setVaccineCode("VAC123");
+        newVaccine.setVaccineName("COVID-19 Vaccine");
+        newVaccine.setDateOnVIS(new Date());
+        newVaccine.setLastUpdatedVIS(new Date());
+        newVaccine.setFederalFunded(true);
+        newVaccine.setStateFunded(false);
         
-        for(Vaccine vaccine: business.getVaccineCatalog().getVaccineCatalog())
+        for(Vaccine vaccine: business.getVaccineCatalog().getVaccineCatalog()){
+            System.out.println("VACCINE : " + vaccine.toString());
             vaccineNamejComboBox.addItem(vaccine);
-        
+        }
     }
 
     /**
@@ -290,7 +305,8 @@ public class AddNewVaccineJPanel extends javax.swing.JPanel {
         
         }
         catch(Exception e)
-        {
+        {   
+            System.out.println("ERROR : " + e);
             JOptionPane.showMessageDialog(null, "Please enter numeric values for numeric fields");
             return;
         }
