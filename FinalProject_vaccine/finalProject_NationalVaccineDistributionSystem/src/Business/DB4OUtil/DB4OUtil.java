@@ -12,11 +12,13 @@ import com.db4o.ta.TransparentPersistenceSupport;
  *
  * @author raunak
  */
-public class DB4OUtil {
+public class DB4OUtil {     
 
-    private static final String FILENAME = "C:\\Users\\Vaibhav\\Documents\\NetBeansProjects\\FinalProject_vaccine\\finalProject_NationalVaccineDistributionSystem\\DataBank.db4o"; // path to the data store
+    private static final String FILENAME = "D:\\TEST\\vDistribute_National-Vaccine-Distribution-System\\FinalProject_vaccine\\finalProject_NationalVaccineDistributionSystem\\test.db4o";
+
+
     private static DB4OUtil dB4OUtil;
-    
+        
     public synchronized static DB4OUtil getInstance(){
         if (dB4OUtil == null){
             dB4OUtil = new DB4OUtil();
@@ -30,26 +32,24 @@ public class DB4OUtil {
         }
     }
 
-    private ObjectContainer createConnection() {
+   private ObjectContainer createConnection() {
         try {
-
             EmbeddedConfiguration config = Db4oEmbedded.newConfiguration();
-            config.common().add(new TransparentPersistenceSupport());
-            //Controls the number of objects in memory
+            config.file().lockDatabaseFile(false); // Disable file locking
             config.common().activationDepth(Integer.MAX_VALUE);
-            //Controls the depth/level of updation of Object
             config.common().updateDepth(Integer.MAX_VALUE);
+            config.common().objectClass(Business.class).cascadeOnUpdate(true);
 
-            //Register your top most Class here
-            config.common().objectClass(Business.class).cascadeOnUpdate(true); // Change to the object you want to save
-
-            ObjectContainer db = Db4oEmbedded.openFile(config, FILENAME);
-            return db;
+            return Db4oEmbedded.openFile(config, FILENAME);
         } catch (Exception ex) {
-            System.out.print(ex.getMessage());
+            System.err.println("Error creating connection: " + ex.getMessage());
+            ex.printStackTrace();
         }
         return null;
     }
+
+
+
 
     public synchronized void storeSystem(Business system) {
         ObjectContainer conn = createConnection();

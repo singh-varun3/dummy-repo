@@ -52,32 +52,40 @@ public class ManageOrdersJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         
          CDCOrganization cOrg = null;
-         
-        for(Organization org : cdcEnterprise.getOrganizationDirectory().getOrganizationList())
-        {   if(org instanceof CDCOrganization)
-        {   cOrg = (CDCOrganization)org;
-            for(WorkRequest workRequest : cOrg.getWorkQueue().getWorkRequestList())
-            {   if(workRequest instanceof ProviderVaccineOrderWorkRequest)
-            {ProviderVaccineOrderWorkRequest vaccineOrderWR = (ProviderVaccineOrderWorkRequest)workRequest;
-                
-                Object[] row = new Object[6];
-            
-                row[0] = vaccineOrderWR;
-                row[1] = vaccineOrderWR.getEnterprise();
-                row[2] = vaccineOrderWR.getRequestState();
-                row[3] = vaccineOrderWR.getSender();
-                row[4] = vaccineOrderWR.getStatus();
-                row[5] = vaccineOrderWR.getCdcApprovedBy();
-                
-                model.addRow(row);
+         try{
+            for(Organization org : cdcEnterprise.getOrganizationDirectory().getOrganizationList())
+            {   
+                System.out.println("Checking for CDC ORG");
+                if(org instanceof CDCOrganization)
+                {
+                    System.out.println("Setting org to cdc");
+                    cOrg = (CDCOrganization)org;
+                    for(WorkRequest workRequest : cOrg.getWorkQueue().getWorkRequestList())
+
+                    {   
+                        System.out.println("IN FOR LOOP");
+                        if(workRequest instanceof ProviderVaccineOrderWorkRequest)
+                        {
+                            System.out.println("WORK REQUEST: " + workRequest.toString());
+                           ProviderVaccineOrderWorkRequest vaccineOrderWR = (ProviderVaccineOrderWorkRequest)workRequest;
+
+                           Object[] row = new Object[6];
+
+                           row[0] = vaccineOrderWR;
+                           row[1] = vaccineOrderWR.getEnterprise();
+                           row[2] = vaccineOrderWR.getRequestState();
+                           row[3] = vaccineOrderWR.getSender();
+                           row[4] = vaccineOrderWR.getStatus();
+                           row[5] = vaccineOrderWR.getCdcApprovedBy();
+
+                           model.addRow(row);
+                       }
+                    }
+                }
             }
-            }
-        }
-        
-        
-        
-        
-    }
+         }catch(Exception e){
+             System.out.println("ERROR : " + e);
+         }
     }
 
     /**

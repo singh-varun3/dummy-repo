@@ -271,7 +271,7 @@ public class ManageVaccinesJPanel extends javax.swing.JPanel {
 
     private void addVaccinejButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addVaccinejButtonActionPerformed
         // TODO add your handling code here:
-         AddNewVaccineJPanel panel = new AddNewVaccineJPanel(workContainer, manufacturer, business);
+        AddNewVaccineJPanel panel = new AddNewVaccineJPanel(workContainer, manufacturer, business);
         workContainer.add("AddNewVaccineJPanel", panel);
         CardLayout layout = (CardLayout)workContainer.getLayout();
         layout.next(workContainer);

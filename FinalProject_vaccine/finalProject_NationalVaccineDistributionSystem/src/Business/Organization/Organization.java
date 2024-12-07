@@ -29,7 +29,7 @@ public abstract class Organization {
     
     public enum OrganizationType{
         EnterpriseAdminOrg("Enterprise Admin Organization") ,
-        CDCOrg ("CDC Organization"),
+            CDCOrg ("CDC Organization"),
            ManufactureOrg("Manufacture Organization"),
            DistributorOrg("Distributor Organization"),
            PublicHealthDepartmentOrg("Public Health Department"),
