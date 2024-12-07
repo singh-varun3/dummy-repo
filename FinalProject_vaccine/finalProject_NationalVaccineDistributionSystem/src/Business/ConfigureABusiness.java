@@ -93,7 +93,7 @@ public class ConfigureABusiness {
         
         //create the State
         StateNetwork state = business.addNewState("MA");
-        state.setStatePopulation(0);
+        state.setStatePopulation(100000);
         state.setVaccinesLeftForState(state.getStatePopulation());
         state.getPublicHealthDepartment().setName(state.getStateName());
         //create a PHD admin
