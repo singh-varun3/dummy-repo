@@ -83,12 +83,10 @@ public class Warehouse {
         vaccineInventoryList.remove(vaccineProduct);
     }
 
-    @Override
-    public String toString() {
-        return String.valueOf(id);
-    }
-    
-    
-    
+@Override
+public String toString() {
+    return "Warehouse ID: " + id + ", Location: " + location; // Replace `location` with the actual field
+}
+
     
 }

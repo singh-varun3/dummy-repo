@@ -30,6 +30,7 @@ public class DistributorEmployeeWorkAreaJPanel extends javax.swing.JPanel {
     private UserAccount userAccount;
     private DistributorOrganization distributorOrg;
     private Business business;
+    
     public DistributorEmployeeWorkAreaJPanel(JPanel userProcessContainer,UserAccount userAccount,Distributor enterprise,DistributorOrganization distributorOrg,Business business ) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
@@ -255,7 +256,7 @@ public class DistributorEmployeeWorkAreaJPanel extends javax.swing.JPanel {
 
     private void manageWareHousejButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageWareHousejButtonActionPerformed
         // TODO add your handling code here:
-         ManageWarehouseJPanel panel = new ManageWarehouseJPanel(workContainer, enterprise, distributorOrg);
+         ManageWarehouseJPanel panel = new ManageWarehouseJPanel(workContainer, enterprise, distributorOrg, business);
         workContainer.add("ManageWarehouseJPanel", panel);
         CardLayout layout = (CardLayout)workContainer.getLayout();
         layout.next(workContainer);

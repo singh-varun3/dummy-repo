@@ -6,15 +6,19 @@
 
 package UserInterface.Distributor;
 
+import Business.Business;
 import Business.Enterprise.Enterprise;
 import Business.Organization.DistributorOrganization;
 import Business.Organization.ManufactureOrganization;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
 import Business.Vaccine.VaccineProduct;
 import Business.Warehouse.Warehouse;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import Business.NationalEnterprise.Distributor;
 
 /**
  *
@@ -26,15 +30,22 @@ public class ManageWarehouseJPanel extends javax.swing.JPanel {
      * Creates new form ManageWarehouseJPanel
      */
     private JPanel workContainer;
-    private Enterprise enterprise;
+    //private Enterprise enterprise;
+    //private UserAccount userAccount;
     private DistributorOrganization distributorOrganization;
     
+    private Distributor distributor;
+    private Business business;
     
-    public ManageWarehouseJPanel(JPanel workContainer,Enterprise enterprise, DistributorOrganization distributorOrganization ) {
+    
+    public ManageWarehouseJPanel(JPanel workContainer,Distributor distributor,DistributorOrganization distributorOrganization, Business business) {
         initComponents();
+        //this.userAccount = userAccount;
         this.workContainer = workContainer;
-        this.enterprise = enterprise;
+        //this.enterprise = enterprise;
         this.distributorOrganization = distributorOrganization;
+        this.distributor = distributor;
+        this.business = business;
         populateTable();
     }
     
@@ -44,6 +55,13 @@ public class ManageWarehouseJPanel extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) warehousejTable.getModel();
         model.setRowCount(0);
         
+        DistributorOrganization distributorOrganization = null;
+        
+        
+        //for(Organization org : distributor.getOrganizationDirectory().getOrganizationList())
+        for(Organization org : distributor.getOrganizationDirectory().getOrganizationList())
+        {   if(org instanceof DistributorOrganization)
+        {   distributorOrganization = (DistributorOrganization)org;
         for(Warehouse warehouse : distributorOrganization.getWarehouseDir().getWarehouseList())
         {
             Object[] row = new Object[3];
@@ -52,7 +70,8 @@ public class ManageWarehouseJPanel extends javax.swing.JPanel {
             row[2] = calculateTotalVaccines(warehouse);
             model.addRow(row);
         }
-        
+        }
+        }
         
         
     }
@@ -87,6 +106,8 @@ public class ManageWarehouseJPanel extends javax.swing.JPanel {
         locationjTextField = new javax.swing.JTextField();
         addWarehousejButton = new javax.swing.JButton();
         viewInventoryjButton = new javax.swing.JButton();
+        newAddWarehousejButton = new javax.swing.JButton();
+        refreshjButton = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -121,6 +142,20 @@ public class ManageWarehouseJPanel extends javax.swing.JPanel {
             }
         });
 
+        newAddWarehousejButton.setText("Add Warehouse >>>");
+        newAddWarehousejButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newAddWarehousejButtonActionPerformed(evt);
+            }
+        });
+
+        refreshjButton.setText("Refresh");
+        refreshjButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshjButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -128,23 +163,28 @@ public class ManageWarehouseJPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
-                    .addComponent(jSeparator1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
+                            .addComponent(jSeparator1)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(addWarehousejButton, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
-                                    .addComponent(locationjTextField))))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(viewInventoryjButton, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                                    .addComponent(locationjTextField))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(refreshjButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(viewInventoryjButton, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(newAddWarehousejButton, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,18 +194,25 @@ public class ManageWarehouseJPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(viewInventoryjButton)
-                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(viewInventoryjButton)
+                        .addGap(30, 30, 30))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(refreshjButton)
+                        .addGap(18, 18, 18)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(newAddWarehousejButton))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(locationjTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(addWarehousejButton)
-                .addContainerGap(155, Short.MAX_VALUE))
+                .addContainerGap(149, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -200,6 +247,21 @@ public class ManageWarehouseJPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_viewInventoryjButtonActionPerformed
 
+    private void newAddWarehousejButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newAddWarehousejButtonActionPerformed
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+        AddNewWarehouseJPanel panel = new AddNewWarehouseJPanel(workContainer, distributor, business, distributorOrganization);
+        workContainer.add("AddNewWarehouseJPanel", panel);
+        CardLayout layout = (CardLayout)workContainer.getLayout();
+        layout.next(workContainer);
+        
+    }//GEN-LAST:event_newAddWarehousejButtonActionPerformed
+
+    private void refreshjButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshjButtonActionPerformed
+        // TODO add your handling code here:
+        populateTable();
+    }//GEN-LAST:event_refreshjButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addWarehousejButton;
@@ -209,6 +271,8 @@ public class ManageWarehouseJPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField locationjTextField;
+    private javax.swing.JButton newAddWarehousejButton;
+    private javax.swing.JButton refreshjButton;
     private javax.swing.JButton viewInventoryjButton;
     private javax.swing.JTable warehousejTable;
     // End of variables declaration//GEN-END:variables

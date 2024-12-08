@@ -7,6 +7,7 @@
 package UserInterface.Distributor;
 
 import Business.Enterprise.Enterprise;
+import Business.NationalEnterprise.Distributor;
 import Business.Organization.DistributorOrganization;
 import Business.Organization.Organization;
 import Business.WorkQueue.VaccineOrderWorkRequest;
@@ -29,6 +30,7 @@ public class ManageOrdersfromManufacturerJPanel extends javax.swing.JPanel {
      private JPanel workContainer;
     private Enterprise enterprise;
     private DistributorOrganization distributorOrganization;
+    private Distributor distributor;
     
     public ManageOrdersfromManufacturerJPanel(JPanel workContainer,Enterprise enterprise, DistributorOrganization distributorOrganization) {
         initComponents();
@@ -65,6 +67,8 @@ public class ManageOrdersfromManufacturerJPanel extends javax.swing.JPanel {
                 
             }
         }
+        
+        
         
         
         
@@ -179,7 +183,7 @@ public class ManageOrdersfromManufacturerJPanel extends javax.swing.JPanel {
         }
         
         
-        StoreVaccinesJPanel panel = new StoreVaccinesJPanel(workContainer, enterprise, distributorOrganization, wr);
+        StoreVaccinesJPanel panel = new StoreVaccinesJPanel(workContainer, enterprise, distributorOrganization, wr,distributor);
         workContainer.add("ManageOrdersfromManufacturerJPanel", panel);
         CardLayout layout = (CardLayout)workContainer.getLayout();
         layout.next(workContainer);

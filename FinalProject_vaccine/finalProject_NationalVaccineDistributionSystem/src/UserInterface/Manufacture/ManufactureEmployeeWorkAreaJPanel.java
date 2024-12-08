@@ -6,10 +6,13 @@
 
 package UserInterface.Manufacture;
 
+import UserInterface.Distributor.ViewContractDetailsAndShipJPanel;
 import Business.Business;
 import Business.Enterprise.Enterprise;
+import Business.NationalEnterprise.Distributor;
 import Business.NationalEnterprise.Manufacturer;
 import Business.UserAccount.UserAccount;
+import Business.WorkQueue.ProviderVaccineOrderWorkRequest;
 import UserInterface.UpdateUserAccountJPanel;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
@@ -27,6 +30,9 @@ public class ManufactureEmployeeWorkAreaJPanel extends javax.swing.JPanel {
     private UserAccount userAccount;
     private Manufacturer manufacturer;
     private Business business;
+    private Distributor distributorEnterprise;
+    private ProviderVaccineOrderWorkRequest request;
+  
     
     public ManufactureEmployeeWorkAreaJPanel(JPanel userProcessContainer,UserAccount userAccount,Manufacturer manufacturer,Business business  ) {
         initComponents();
@@ -34,6 +40,7 @@ public class ManufactureEmployeeWorkAreaJPanel extends javax.swing.JPanel {
         this.userAccount = userAccount;
         this.manufacturer = manufacturer;
         this.business = business;
+        //this.distributorEnterprise = distributorEnterprise;
         namejLabel.setText(userAccount.getPerson().getFirstName()+" "+userAccount.getPerson().getLastName());
         manufacturerNamejLabel.setText(String.valueOf(manufacturer));
         
@@ -124,13 +131,6 @@ public class ManufactureEmployeeWorkAreaJPanel extends javax.swing.JPanel {
             .addGroup(mainMenuLayout.createSequentialGroup()
                 .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainMenuLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(manageVaccineProdjButton, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                            .addComponent(manageOrdersjButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(viewBalancejButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(manageRecallRequestsjButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(mainMenuLayout.createSequentialGroup()
                         .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(mainMenuLayout.createSequentialGroup()
                                 .addContainerGap()
@@ -141,7 +141,14 @@ public class ManufactureEmployeeWorkAreaJPanel extends javax.swing.JPanel {
                             .addGroup(mainMenuLayout.createSequentialGroup()
                                 .addGap(43, 43, 43)
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(mainMenuLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(manageVaccineProdjButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(manageOrdersjButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(viewBalancejButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(manageRecallRequestsjButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         mainMenuLayout.setVerticalGroup(
@@ -161,7 +168,7 @@ public class ManufactureEmployeeWorkAreaJPanel extends javax.swing.JPanel {
                 .addComponent(viewBalancejButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(manageRecallRequestsjButton)
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addContainerGap(139, Short.MAX_VALUE))
         );
 
         jSplitPane2.setTopComponent(mainMenu);

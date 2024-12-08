@@ -38,6 +38,10 @@ import Business.Role.SatelliteClinicProviderRole;
 import Business.Role.SystemAdminRole;
 import Business.UserAccount.UserAccount;
 
+import Business.Warehouse.Warehouse;
+import Business.Warehouse.WarehouseDirectory;
+import java.util.Date;
+
 /**
  *
  * @author raunak
@@ -92,9 +96,21 @@ public class ConfigureABusiness {
         
         //create the State
         StateNetwork state = business.addNewState("MA");
-        state.setStatePopulation(0);
+        state.setStatePopulation(10000);
         state.setVaccinesLeftForState(state.getStatePopulation());
         state.getPublicHealthDepartment().setName(state.getStateName());
+       
+        
+        
+        
+        //create WareHouse
+        // Create Warehouse and Dummy Data
+        WarehouseDirectory warehouseDirectory = new WarehouseDirectory();
+        Warehouse warehouse1 = warehouseDirectory.addNewWareHouse();
+        warehouse1.setLocation("Boston, MA");
+        warehouse1.setTemperature(2.5); // Temperature in Celsius
+        
+        
         //create a PHD admin
         EnterpriseAdminPerson phdAdmin = (EnterpriseAdminPerson)state.getPublicHealthDepartment().getPersonDirectory().createPerson("PHD Admin", null, RoleType.EnterpriseAdmin);
         
@@ -167,6 +183,7 @@ public class ConfigureABusiness {
         //create doctor user account
       //  UserAccount docAdmin = organization.getUserAccountDirectory().createUserAccount("doc", "doc", employee, new DoctorRole());
         
+       
         
         
         return business;

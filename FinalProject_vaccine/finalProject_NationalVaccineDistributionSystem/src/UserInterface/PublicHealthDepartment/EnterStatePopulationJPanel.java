@@ -6,6 +6,7 @@
 
 package UserInterface.PublicHealthDepartment;
 
+import Business.Business;
 import Business.Network.StateNetwork;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,13 +22,21 @@ public class EnterStatePopulationJPanel extends javax.swing.JPanel {
      */
     private JPanel workContainer;
     private StateNetwork state;
+    //private Business business;
     
     public EnterStatePopulationJPanel(JPanel workContainer, StateNetwork state) {
         initComponents();
         this.workContainer = workContainer;
         this.state = state;
+        //this.business = business;
         
+        
+        try{
         currentPopulationjTextField.setText(String.valueOf(state.getStatePopulation()));
+        }
+        catch(Exception e){
+            currentPopulationjTextField.setText(String.valueOf(1));
+        }
     }
 
     /**

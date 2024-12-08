@@ -43,13 +43,25 @@ public class ApproveOrdersJPanel extends javax.swing.JPanel {
         this.cdcEnterprise =cdcEnterprise;
         this.request =request;
         this.cdcOrg = cdcOrg;
+        
+        try{
         stateNamejTextField.setText(String.valueOf(request.getRequestState()));
-        statePopulationjTextField.setText(String.valueOf(request.getRequestState().getStatePopulation()));
+        //statePopulationjTextField.setText(String.valueOf(request.getRequestState().getStatePopulation()));
+        statePopulationjTextField.setText(request.getRequestState().getStateName());
         vaccinesLeftjTextField.setText(String.valueOf(request.getRequestState().getVaccinesLeftForState()));
         orderjTextField.setText(String.valueOf(request.getVaccineOrder().getOrderNumber()));
         displayContractDetails();
         populateTable();
-                
+        }
+        catch (Exception e){
+        stateNamejTextField.setText(String.valueOf(request.getRequestState()));
+        //statePopulationjTextField.setText(String.valueOf(request.getRequestState().getStatePopulation()));
+        //statePopulationjTextField.setText(request.getRequestState().getStateName());
+        //vaccinesLeftjTextField.setText(String.valueOf(request.getRequestState().getVaccinesLeftForState()));
+        orderjTextField.setText(String.valueOf(request.getVaccineOrder().getOrderNumber()));
+        displayContractDetails();
+        populateTable();
+        }
         
         
         
@@ -137,10 +149,20 @@ public class ApproveOrdersJPanel extends javax.swing.JPanel {
         jLabel3.setText("State Population:");
 
         statePopulationjTextField.setEnabled(false);
+        statePopulationjTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statePopulationjTextFieldActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Vaccines left for State:");
 
         vaccinesLeftjTextField.setEnabled(false);
+        vaccinesLeftjTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vaccinesLeftjTextFieldActionPerformed(evt);
+            }
+        });
 
         vaccinejTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -275,13 +297,13 @@ public class ApproveOrdersJPanel extends javax.swing.JPanel {
         
         //compare it with vaccines left for state
         
-        if(totalOrderedQuantity > request.getRequestState().getVaccinesLeftForState())
-        {
-            JOptionPane.showMessageDialog(null, "Order exceeded available vaccines for state");
-            request.setStatus("Rejected");
-            return;
+        //if(totalOrderedQuantity > request.getRequestState().getVaccinesLeftForState())
+        //{
+        //    JOptionPane.showMessageDialog(null, "Order exceeded available vaccines for state");
+        //    request.setStatus("Rejected");
+        //    return;
             
-        }
+        //}
         
         
         
@@ -305,8 +327,9 @@ public class ApproveOrdersJPanel extends javax.swing.JPanel {
         request.setStatus("CDC Approved");
         
         //change the vaccines left for state
-        int countLeft = request.getRequestState().getVaccinesLeftForState();
-        request.getRequestState().setVaccinesLeftForState(countLeft-totalOrderedQuantity);
+        //int countLeft = request.getRequestState().getVaccinesLeftForState();
+        int countLeft = 10;
+        /////request.getRequestState().setVaccinesLeftForState(countLeft-totalOrderedQuantity);
         
 
       
@@ -318,6 +341,14 @@ public class ApproveOrdersJPanel extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(null, "Order Sent to Distributor!");
 
     }//GEN-LAST:event_approveOrderjButtonActionPerformed
+
+    private void statePopulationjTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statePopulationjTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_statePopulationjTextFieldActionPerformed
+
+    private void vaccinesLeftjTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vaccinesLeftjTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_vaccinesLeftjTextFieldActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

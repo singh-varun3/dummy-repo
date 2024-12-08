@@ -7,8 +7,10 @@
 package UserInterface.Distributor;
 
 import Business.Enterprise.Enterprise;
+import Business.NationalEnterprise.Distributor;
 import Business.Order.OrderItem;
 import Business.Organization.DistributorOrganization;
+import Business.Organization.Organization;
 import Business.Vaccine.VaccineProduct;
 import Business.Warehouse.Warehouse;
 import Business.WorkQueue.VaccineOrderWorkRequest;
@@ -28,21 +30,48 @@ public class StoreVaccinesJPanel extends javax.swing.JPanel {
      */
     private JPanel workContainer;
     private Enterprise enterprise;
+    private Distributor distributor;
     private DistributorOrganization distributorOrganization;
     private VaccineOrderWorkRequest request;
     
-    public StoreVaccinesJPanel(JPanel workContainer,Enterprise enterprise, DistributorOrganization distributorOrganization, VaccineOrderWorkRequest request) {
+    public StoreVaccinesJPanel(JPanel workContainer,Enterprise enterprise, DistributorOrganization distributorOrganization, VaccineOrderWorkRequest request, Distributor distributor) {
         initComponents();
         this.workContainer = workContainer;
         this.enterprise = enterprise;
         this.distributorOrganization = distributorOrganization;
         this.request = request;
-        orderNumberjTextField.setText(String.valueOf(request.getVaccineOrder().getOrderNumber()));
-        populateTable();
-        calculateTotalAmount();
-        populateWarehouseComboBox();
+        this.distributor = distributor;
         
-    }
+        orderNumberjTextField.setText(String.valueOf(request.getVaccineOrder().getOrderNumber()));
+
+
+        //populateDepartmentJComboBox();
+        //System.out.println("distributor : " + distributor.toString());
+        populateTable();
+        populateWarehouseComboBox();
+        calculateTotalAmount();
+    
+    
+    
+    
+}
+        /*
+        private void populateDepartmentJComboBox() {
+            departmentjComboBox.removeAllItems();
+
+            for (Organization org : distributor.getOrganizationDirectory().getOrganizationList()) {
+                if (org instanceof DistributorOrganization) {
+                    departmentjComboBox.addItem((DistributorOrganization) org);
+                }
+            }
+
+            // Set the first department as the default selection
+            if (departmentjComboBox.getItemCount() > 0) {
+                departmentjComboBox.setSelectedIndex(0);
+                populateWarehouseComboBox(); // Populate warehouses for the default department
+            }
+        }
+        */
     
     private void populateTable() {
 
@@ -72,15 +101,23 @@ public class StoreVaccinesJPanel extends javax.swing.JPanel {
     }
      
      private void populateWarehouseComboBox(){
-         warehousejComboBox.removeAllItems();
-         
-         for(Warehouse warehouse: distributorOrganization.getWarehouseDir().getWarehouseList())
-         {
-             warehousejComboBox.addItem(warehouse);
-         }
-         
-     }
 
+        //DistributorOrganization distributorOrganization = (DistributorOrganization) departmentjComboBox.getSelectedItem();
+
+            if (distributorOrganization == null) {
+                return;
+            }
+
+            warehousejComboBox.removeAllItems();
+
+            for (Warehouse warehouse : distributorOrganization.getWarehouseDir().getWarehouseList()) {
+                warehousejComboBox.addItem(warehouse);
+            }
+
+            if (warehousejComboBox.getItemCount() > 0) {
+                warehousejComboBox.setSelectedIndex(0);
+            }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -164,29 +201,32 @@ public class StoreVaccinesJPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(orderNumberjTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(totalAmountjTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(backJButton2)
-                            .addComponent(jLabel5)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(warehousejComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(storeVaccinejButton, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(totalAmountjTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(backJButton2)
+                                    .addComponent(jLabel5)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(warehousejComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(storeVaccinejButton, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(orderNumberjTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

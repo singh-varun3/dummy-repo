@@ -25,7 +25,7 @@ public class StateNetwork {
         
         this.cityList = new ArrayList<>();
         publicHealthDepartment = new PublicHealthDepartment(stateName);
-        statePopulation = 0;
+        statePopulation = 100;
         vaccinesLeftForState = statePopulation;
     }
 

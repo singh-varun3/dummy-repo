@@ -17,18 +17,18 @@ import java.util.ArrayList;
  */
 public class DistributorOrganization extends Organization{
     
-    private WarehouseDirectory warehouseDir;
+    private WarehouseDirectory warehouseDirectory;
     
     public DistributorOrganization() {
         super(OrganizationType.DistributorOrg.getValue());
-        warehouseDir = new WarehouseDirectory();
+        warehouseDirectory = new WarehouseDirectory();
     }
 
     public WarehouseDirectory getWarehouseDir() {
-        return warehouseDir;
+        return warehouseDirectory;
     }
     
-    
+
     
     
     

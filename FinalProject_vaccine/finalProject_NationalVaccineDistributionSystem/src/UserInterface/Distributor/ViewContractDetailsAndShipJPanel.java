@@ -56,37 +56,62 @@ public class ViewContractDetailsAndShipJPanel extends javax.swing.JPanel {
         this.business = business;
         this.request = request;
         this.distributorEnterprise = distributorEnterprise;
+        
+        
+            try {
+        if (request == null) {
+            throw new NullPointerException("Request is null.");
+        }
         orderjTextField.setText(String.valueOf(request.getVaccineOrder().getOrderNumber()));
         displayContractDetails();
         calculateTotalCostOfOrder();
         populateOrderTable();
-        flag = false;
-        
+    } catch (NullPointerException e) {
+        //JOptionPane.showMessageDialog(this, "Request data is missing. Please ensure the request is valid.", "Error", JOptionPane.ERROR_MESSAGE);
+        // Optionally disable functionality or provide default values
+    }
+    flag = false;
+          
         
         
     }
     
     private void displayContractDetails(){
         
-        if(request.isBimonthlyContract())
+        try {
+        if (request == null) {
+            throw new NullPointerException("Request is null.");
+        }
+
+        if (request.isBimonthlyContract()) {
             contractDetailsjTextField.setText("Bimonthly");
-        if(request.isMonthlyContract())
+        } else if (request.isMonthlyContract()) {
             contractDetailsjTextField.setText("Monthly");
-        if(request.isAdhocRequest())
+        } else if (request.isAdhocRequest()) {
             contractDetailsjTextField.setText("Adhoc");
-        
+        }
+    } catch (NullPointerException e) {
+        contractDetailsjTextField.setText("No Contract Details Available");
     }
+}
     
     
     private void calculateTotalCostOfOrder(){
         
+        try {
+        if (request == null || request.getVaccineOrder() == null) {
+            throw new NullPointerException("Order details are not available.");
+        }
+
         double total = 0;
-        for(OrderItem oi : request.getVaccineOrder().getOrderList())
-        {
-            total = total + (oi.getVaccineProduct().getVaccinePrice()*oi.getQuantity());
+        for (OrderItem oi : request.getVaccineOrder().getOrderList()) {
+            total += oi.getVaccineProduct().getVaccinePrice() * oi.getQuantity();
         }
         totalCostjTextField.setText(String.valueOf(total));
+    } catch (NullPointerException e) {
+        totalCostjTextField.setText("0.0");
     }
+}
     
     
     private void populateOrderTable(){
@@ -131,152 +156,34 @@ public class ViewContractDetailsAndShipJPanel extends javax.swing.JPanel {
         
        
         
-        //create array list for products
-        ArrayList<OrderItem> cdcVaccineList = new ArrayList<OrderItem>();
-        ArrayList<OrderItem> phdVaccineList = new ArrayList<OrderItem>();
-        ArrayList<OrderItem> providerVaccineList = new ArrayList<OrderItem>();
-        
-        //check if the vaccine is fed funded/ state funded
-        for(OrderItem oi: request.getVaccineOrder().getOrderList())
-        {   
-        
-            if(oi.getVaccineProduct().getVaccineDefinition().isFederalFunded())
-            {
-                cdcVaccineList.add(oi);
-                               
-            }
-            else if(oi.getVaccineProduct().getVaccineDefinition().isStateFunded() && oi.getVaccineProduct().getVaccineDefinition().isVaccineFundedByMentionedState(request.getRequestState()))
-            {
-                phdVaccineList.add(oi);
-            }
-            else 
-            {
-                providerVaccineList.add(oi);
-            }
-            
+       DefaultTableModel dtm = (DefaultTableModel) orderjTable.getModel();
+    dtm.setRowCount(0);
+
+    try {
+        if (request == null || request.getVaccineOrder() == null) {
+            throw new NullPointerException("Order details are missing.");
         }
-        
-        //check and send it to respective sites.
-        
-        if(cdcVaccineList.isEmpty()==false){
-          PaymentRequestWorkRequest cdcPaymentRequest = new PaymentRequestWorkRequest();
-          cdcPaymentRequest.setVaccineOrder(request.getVaccineOrder());
-          cdcPaymentRequest.setSender(userAccount);
-          cdcPaymentRequest.setRequestDate(new Date());
-          cdcPaymentRequest.setStatus("Pending");
-          cdcPaymentRequest.setProviderRequest(request);
-          //create a billed order and calculate the total amount
-          double totalAmount =0;
-          for(OrderItem oi: cdcVaccineList)
-          {
-              cdcPaymentRequest.getBilledOrder().addNewOrderItem(oi.getQuantity(), oi.getVaccineProduct());
-              totalAmount = totalAmount + (oi.getVaccineProduct().getVaccinePrice()*oi.getQuantity());
-          }
-          
-          cdcPaymentRequest.setAmount(totalAmount);
-          //store the request in distributor workqueue
-            for(Organization org : distributorEnterprise.getOrganizationDirectory().getOrganizationList())
-            {
-                if(org instanceof DistributorOrganization)
-                {
-                    DistributorOrganization distOrg = (DistributorOrganization)org;
-                    distOrg.getWorkQueue().addWorkRequest(cdcPaymentRequest);
-                    break;
-                }
-            }
-          
-          //send the request to CDC
-          for(Organization org: business.getCdc().getOrganizationDirectory().getOrganizationList()){
-              if(org instanceof CDCOrganization){
-                  CDCOrganization cdcOrg = (CDCOrganization)org;
-                  cdcOrg.getWorkQueue().addWorkRequest(cdcPaymentRequest);
-              }
-          }
+
+        for (OrderItem oi : request.getVaccineOrder().getOrderList()) {
+            Object[] row = new Object[12];
+            row[0] = oi.getVaccineProduct();
+            row[1] = oi;
+            row[2] = oi.getVaccineProduct().getManufacturerName();
+            row[3] = oi.getVaccineProduct().getVaccineId();
+            row[4] = oi.getVaccineProduct().getBatchId();
+            row[5] = oi.getVaccineProduct().getVaccinePrice();
+            row[6] = oi.getVaccineProduct().getMinOperatingTemp() + " - " + oi.getVaccineProduct().getMaxOperatingTemp();
+            row[7] = oi.getQuantity();
+            row[8] = oi.getVaccineProduct().getManufactureDate();
+            row[9] = oi.getVaccineProduct().getDateOfExpiry();
+            row[10] = oi.getVaccineProduct().getVaccinePrice() * oi.getQuantity();
+            row[11] = oi.getVaccineProduct().getVaccineDefinition().isFederalFunded() ? "Federal" : oi.getVaccineProduct().getVaccineDefinition().getFundedStateList().isEmpty() ? "Not Funded" : "State";
+            dtm.addRow(row);
         }
-        if(phdVaccineList.isEmpty()==false){
-          PaymentRequestWorkRequest phdPaymentRequest = new PaymentRequestWorkRequest();
-          phdPaymentRequest.setVaccineOrder(request.getVaccineOrder());
-          phdPaymentRequest.setSender(userAccount);
-          phdPaymentRequest.setRequestDate(new Date());
-          phdPaymentRequest.setStatus("Pending");
-          phdPaymentRequest.setProviderRequest(request);
-          //create a billed order and calculate the total amount
-          double totalAmount =0;
-          for(OrderItem oi: phdVaccineList)
-          {
-              phdPaymentRequest.getBilledOrder().addNewOrderItem(oi.getQuantity(), oi.getVaccineProduct());
-              totalAmount = totalAmount + (oi.getVaccineProduct().getVaccinePrice()*oi.getQuantity());
-          }
-          
-          phdPaymentRequest.setAmount(totalAmount);
-          //store the request in distributor workqueue
-            for(Organization org : distributorEnterprise.getOrganizationDirectory().getOrganizationList())
-            {
-                if(org instanceof DistributorOrganization)
-                {
-                    DistributorOrganization distOrg = (DistributorOrganization)org;
-                    distOrg.getWorkQueue().addWorkRequest(phdPaymentRequest);
-                    break;
-                }
-            }
-          
-          //send the request to respective State
-          StateNetwork fundedState = request.getRequestState();
-          
-          for(Organization org: fundedState.getPublicHealthDepartment().getOrganizationDirectory().getOrganizationList()){
-              if(org instanceof PHDImmunizationOrganization){
-                  PHDImmunizationOrganization phdOrg = (PHDImmunizationOrganization)org;
-                  phdOrg.getWorkQueue().addWorkRequest(phdPaymentRequest);
-              }
-          }
-        }
-        if(providerVaccineList.isEmpty()==false){
-          PaymentRequestWorkRequest providerPaymentRequest = new PaymentRequestWorkRequest();
-          providerPaymentRequest.setVaccineOrder(request.getVaccineOrder());
-          providerPaymentRequest.setSender(userAccount);
-          providerPaymentRequest.setRequestDate(new Date());
-          providerPaymentRequest.setStatus("Pending");
-          providerPaymentRequest.setProviderRequest(request);
-          //create a billed order and calculate the total amount
-          double totalAmount =0;
-          for(OrderItem oi: providerVaccineList)
-          {
-              providerPaymentRequest.getBilledOrder().addNewOrderItem(oi.getQuantity(), oi.getVaccineProduct());
-              totalAmount = totalAmount + (oi.getVaccineProduct().getVaccinePrice()*oi.getQuantity());
-          }
-          
-          providerPaymentRequest.setAmount(totalAmount);
-          //store the request in distributor workqueue
-            for(Organization org : distributorEnterprise.getOrganizationDirectory().getOrganizationList())
-            {
-                if(org instanceof DistributorOrganization)
-                {
-                    DistributorOrganization distOrg = (DistributorOrganization)org;
-                    distOrg.getWorkQueue().addWorkRequest(providerPaymentRequest);
-                    break;
-                }
-            }
-          
-          
-          //send the request to respective Provider
-            HospitalEnterprise hospital = (HospitalEnterprise)request.getEnterprise();
-          
-          for(Organization org: hospital.getOrganizationDirectory().getOrganizationList()){
-              if(org instanceof HospitalOrganization){
-                  HospitalOrganization hospOrg = (HospitalOrganization)org;
-                  hospOrg.getWorkQueue().addWorkRequest(providerPaymentRequest);
-              }
-          }
-        }
-        
-        JOptionPane.showMessageDialog(null, "Payment request send to respective sites!");
-            
-            
-        
-        
-        
-        
+    } catch (NullPointerException e) {
+        JOptionPane.showMessageDialog(this, "Order details are missing. Cannot populate table.", "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
     
 
     /**

@@ -58,7 +58,7 @@ public class ShippingOrderWorkRequest extends WorkRequest {
     public void setShippingDate(Date shippingDate) {
         this.shippingDate = shippingDate;
     }
-
+ 
     @Override
     public String toString() {
         return String.valueOf(vaccineOrder.getOrderNumber());

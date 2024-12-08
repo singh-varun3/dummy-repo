@@ -14,7 +14,7 @@ import com.db4o.ta.TransparentPersistenceSupport;
  */
 public class DB4OUtil {     
 
-    private static final String FILENAME = "D:\\TEST\\vDistribute_National-Vaccine-Distribution-System\\FinalProject_vaccine\\finalProject_NationalVaccineDistributionSystem\\test.db4o";
+    private static final String FILENAME = "/Users/ethangomes/Downloads/DataBank.db4o";
 
 
     private static DB4OUtil dB4OUtil;
